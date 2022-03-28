@@ -1,8 +1,8 @@
-main.exe: main.cpp
-	g++ main.cpp -lpthread -lsfml-graphics -lsfml-window -lsfml-system -o main.exe
+build:
+	g++ pathEditor.cpp -lsfml-graphics -lsfml-window -lsfml-system -o pathEditor.exe
+
+path:
+	./pathEditor.exe
 
 clean:
 	rm *.exe
-
-run: main.exe
-	./main.exe
