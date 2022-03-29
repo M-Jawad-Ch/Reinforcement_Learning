@@ -13,6 +13,11 @@ class Edge
     {
         return sf::Vector2f((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
     }
+
+    float magnitude()
+    {
+        return sqrt( pow(p2.x - p1.x,2) + pow(p2.y - p1.y, 2) );
+    }
 };
 
 bool Intersection(const Edge &edge1, const Edge &edge2, sf::Vector2f &interPoint)

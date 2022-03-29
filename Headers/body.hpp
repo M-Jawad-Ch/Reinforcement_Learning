@@ -2,10 +2,34 @@
 
 class Body
 {
+    void setDirection()
+    {
+        direction = front - center;
+        Edge e; e.p1 = center; e.p2 = front;
+
+        direction.x /= -e.magnitude();
+        direction.y /= -e.magnitude();
+    }
+
+    sf::Vector2f transform(sf::Vector2f p, sf::Vector2f origin, float angle)
+    {
+        p -= origin;
+
+        sf::Vector2f resultant;
+
+        resultant.x = p.x * cos(angle) + p.y * sin(angle);
+        resultant.y = -p.x * sin(angle) + p.y * cos(angle);
+
+        resultant += origin;
+
+        return resultant;
+    }
+
     public:
     
     Edge e1, e2, e3, e4;
     sf::Vector2f center, front;
+    sf::Vector2f direction;
 
     Body(sf::Vector2f cent, float scale)
     {
@@ -31,6 +55,41 @@ class Body
         e4.p1 = p4; e4.p2 = p1;
 
         center = cent;
+
+        setDirection();
+    }
+
+    void translate(float stepSize)
+    {
+        setDirection();
+
+        sf::Vector2f step = direction * stepSize;
+
+        e1.p1 += step; e1.p2 += step;
+        e2.p1 += step; e2.p2 += step;
+        e3.p1 += step; e3.p2 += step;
+        e4.p1 += step; e4.p2 += step;
+
+        center += step; front += step;
+    }
+
+    void rotate(float angle)
+    {
+        e1.p1 = transform(e1.p1, center, angle);
+        e1.p2 = transform(e1.p2, center, angle);
+
+        e2.p1 = transform(e2.p1, center, angle);
+        e2.p2 = transform(e2.p2, center, angle);
+
+        e3.p1 = transform(e3.p1, center, angle);
+        e3.p2 = transform(e3.p2, center, angle);
+
+        e4.p1 = transform(e4.p1, center, angle);
+        e4.p2 = transform(e4.p2, center, angle);
+
+        front = transform(front, center, angle);
+
+        setDirection();
     }
 
     sf::VertexArray drawable()

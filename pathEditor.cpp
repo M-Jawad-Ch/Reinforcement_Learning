@@ -3,14 +3,14 @@
 #include<iostream>
 #include<fstream>
 
-void save(sf::VertexArray &path)
+void save(sf::VertexArray &path, sf::Vector2f screen)
 {
     std::vector<float> data;
     
     for(int i = 0; i < path.getVertexCount(); i++)
     {
-        data.push_back( path[i].position.x );
-        data.push_back( path[i].position.y );
+        data.push_back( path[i].position.x / screen.x );
+        data.push_back( path[i].position.y / screen.y );
     }
 
     std :: cout << " Enter the name of your path : ";
@@ -78,7 +78,7 @@ int main()
                     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) )
                     {
                         window.close();
-                        save(path);
+                        save(path, sf::Vector2f( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height ));
                     }
 
                     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::C) )
