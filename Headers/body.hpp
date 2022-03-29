@@ -25,21 +25,38 @@ class Body
         return resultant;
     }
 
+    void setRays(int rayCount)
+    {
+        float pi = 22.0 / 7.0;
+
+        for(float x = 0; x <= pi; x += pi / rayCount)
+        {
+            Edge e;
+            e.p1 = center;
+
+            e.p2.x = 10000; e.p2.y = 10000;
+            e.p2 = transform(e.p2, center, x);
+
+            rays.push_back(e);
+        }
+    }
+
     public:
     
     Edge e1, e2, e3, e4;
     sf::Vector2f center, front;
     sf::Vector2f direction;
+    std::vector<Edge> rays;
 
-    Body(sf::Vector2f cent, float scale)
+    Body(sf::Vector2f cent, float scale, int rayCount)
     {
         sf::Vector2f p1, p2, p3, p4;
 
-        p1.x = -1.5; p1.y = 2;
-        p2.x = 1.5; p2.y = 2;
-        p3.x = 1.5; p3.y = -2;
-        p4.x = -1.5; p4.y = -2;
-        front.x = 0; front.y = 2;
+        p1.x = -1.5; p1.y = -2;
+        p2.x = 1.5; p2.y = -2;
+        p3.x = 1.5; p3.y = 2;
+        p4.x = -1.5; p4.y = 2;
+        front.x = 0; front.y = -2;
 
         p1 *= scale; p2 *= scale;
         p3 *= scale; p4 *= scale;
@@ -57,13 +74,20 @@ class Body
         center = cent;
 
         setDirection();
+
+        setRays(rayCount - 1);
+
+        for(int i = 0; i < rays.size(); i++)
+        {
+            rays[i].p2 = transform(rays[i].p2, center, (22.0/7.0) / 4);
+        }
     }
 
     void translate(float stepSize)
     {
         setDirection();
 
-        sf::Vector2f step = direction * stepSize;
+        sf::Vector2f step = direction * -stepSize;
 
         e1.p1 += step; e1.p2 += step;
         e2.p1 += step; e2.p2 += step;
@@ -71,6 +95,12 @@ class Body
         e4.p1 += step; e4.p2 += step;
 
         center += step; front += step;
+
+        for(int i = 0; i < rays.size(); i++)
+        {
+            rays[i].p1 += step;
+            rays[i].p2 += step;
+        }
     }
 
     void rotate(float angle)
@@ -89,6 +119,11 @@ class Body
 
         front = transform(front, center, angle);
 
+        for(int i = 0; i < rays.size(); i++)
+        {
+            rays[i].p2 = transform(rays[i].p2, center, angle);
+        }
+
         setDirection();
     }
 
@@ -104,6 +139,12 @@ class Body
         array.append(sf::Vertex(e3.p2));
         array.append(sf::Vertex(e4.p1));
         array.append(sf::Vertex(e4.p2));
+
+        for(int i = 0; i < rays.size(); i++)
+        {
+            array.append(sf::Vertex( rays[i].p1 ));
+            array.append(sf::Vertex( rays[i].p2 ));
+        }
 
         array.setPrimitiveType(sf::PrimitiveType::Lines);
 
