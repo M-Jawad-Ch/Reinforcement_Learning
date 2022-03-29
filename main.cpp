@@ -83,6 +83,7 @@ int main()
                     break;
 
                 case ( sf::Event::KeyPressed ):
+                {
                     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) )
                     {
                         window.close();
@@ -125,8 +126,58 @@ int main()
                     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::D) )
                         Dpress = true;
                     else Dpress = false;
-
                     break;
+                }
+
+                case ( sf::Event::KeyReleased ):
+                {
+                    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Escape) )
+                {
+                    window.close();
+                }
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Left) )
+                {
+                    window.setView( sf::View( sf::Vector2f( window.getView().getCenter().x + 20, window.getView().getCenter().y ), window.getView().getSize() ) );
+                }
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Right) )
+                {
+                    window.setView( sf::View( sf::Vector2f( window.getView().getCenter().x - 20, window.getView().getCenter().y ), window.getView().getSize() ) );
+                }
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Up) )
+                {
+                    window.setView( sf::View( sf::Vector2f( window.getView().getCenter().x, window.getView().getCenter().y + 20 ), window.getView().getSize() ) );
+                }
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::Down) )
+                {
+                    window.setView( sf::View( sf::Vector2f( window.getView().getCenter().x, window.getView().getCenter().y - 20 ), window.getView().getSize() ) );
+                }
+
+
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::W) )
+                    Wpress = true;
+                else Wpress = false;
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) )
+                    Spress = true;
+                else Spress = false;
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::A) )
+                    Apress = true;
+                else Apress = false;
+
+                if ( sf::Keyboard::isKeyPressed(sf::Keyboard::D) )
+                    Dpress = true;
+                else Dpress = false;
+                break;
+            }
+
+            default:
+                break;
             }
 
             if ( Wpress )
@@ -147,7 +198,6 @@ int main()
             if ( Dpress )
             {
                 body.rotate(-pi / 20);
-                Dpress = false;
             }
 
 

@@ -140,12 +140,6 @@ class Body
         array.append(sf::Vertex(e4.p1));
         array.append(sf::Vertex(e4.p2));
 
-        for(int i = 0; i < rays.size(); i++)
-        {
-            array.append(sf::Vertex( rays[i].p1 ));
-            array.append(sf::Vertex( rays[i].p2 ));
-        }
-
         array.setPrimitiveType(sf::PrimitiveType::Lines);
 
         return array;
