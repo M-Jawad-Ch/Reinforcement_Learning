@@ -167,9 +167,9 @@ class Body
                 }
             }
 
-            sf::CircleShape circle(3, 8);
+            sf::CircleShape circle(1, 8);
             circle.setPosition(prevPoint);
-            circle.setOrigin(3, 3);
+            circle.setOrigin(1, 1);
             array.push_back(circle);
         }
 

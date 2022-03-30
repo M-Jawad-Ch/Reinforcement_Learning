@@ -15,7 +15,7 @@ void save(sf::VertexArray &path, sf::Vector2f screen)
 
     std :: cout << " Enter the name of your path : ";
     std :: string fileName; std :: cin >> fileName;
-    fileName = "Enviorments/" + fileName + ".bin";
+    fileName = "Environments/" + fileName + ".bin";
 
     std :: ofstream fout(fileName);
     int vertexCount = path.getVertexCount();

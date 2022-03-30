@@ -8,12 +8,12 @@
 
 void load(std::vector<Edge> &edges, sf::VertexArray &vertices, sf::Vector2f screen)
 {
-    //std :: cout << " Enter the enviorment name : ";
+    //std :: cout << " Enter the environment name : ";
     //std :: string fileName; 
     
     std :: string fileName = "path1";
 
-    fileName = "Enviorments/" + fileName + ".bin";
+    fileName = "Environments/" + fileName + ".bin";
 
     std :: ifstream fin(fileName);
 
