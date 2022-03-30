@@ -56,7 +56,7 @@ int main()
     std::vector<Edge> edges;
     float pi = 22.0 / 7.0;
 
-    Body body( sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2), 10, 10);
+    Body body( sf::Vector2f(sf::VideoMode::getDesktopMode().width / 2, sf::VideoMode::getDesktopMode().height / 2), 10, 32);
 
     bool Wpress, Apress, Spress, Dpress;
 
@@ -203,8 +203,16 @@ int main()
 
             window.clear(sf::Color::Black);
 
-            window.draw(path);
+            //window.draw(path);                                                    // Path visibility
+
             window.draw(body.drawable());
+
+            std :: vector <sf::CircleShape> circle = body.inter(edges);
+
+            for(int i = 0; i < circle.size(); i++)
+            {
+                window.draw( circle[i] );
+            }
 
             window.display();
         }

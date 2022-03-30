@@ -144,4 +144,35 @@ class Body
 
         return array;
     }
+
+    std::vector<sf::CircleShape> inter(const std::vector<Edge> &entites)
+    {
+        std::vector<sf::CircleShape> array;
+
+        for(int i = 0; i < rays.size(); i++)
+        {
+            sf::Vector2f point, prevPoint = rays[i].p2;
+
+            for(int j = 0; j < entites.size(); j++)
+            {
+                if ( Intersection(rays[i], entites[j], point) )
+                {
+                    Edge e1, e2; e1.p1 = center; e1.p2 = point;
+                    e2.p1 = center; e2.p2 = prevPoint;
+
+                    if ( e1.magnitude() < e2.magnitude() )
+                    {   
+                        prevPoint = point;
+                    }
+                }
+            }
+
+            sf::CircleShape circle(3, 8);
+            circle.setPosition(prevPoint);
+            circle.setOrigin(3, 3);
+            array.push_back(circle);
+        }
+
+        return array;
+    }
 };

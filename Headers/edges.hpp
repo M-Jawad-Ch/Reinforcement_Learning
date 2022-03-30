@@ -20,7 +20,7 @@ class Edge
     }
 };
 
-bool Intersection(const Edge &edge1, const Edge &edge2, sf::Vector2f &interPoint)
+bool Intersection(const Edge edge1, const Edge edge2, sf::Vector2f &interPoint)
 {
     float m1, m2;
 
@@ -37,7 +37,7 @@ bool Intersection(const Edge &edge1, const Edge &edge2, sf::Vector2f &interPoint
         {
             if ( y <= fmax(edge1.p1.y, edge1.p2.y) && y <= fmax(edge2.p1.y, edge2.p2.y) )
             {
-                if ( y >= fmin(edge1.p1.y, edge1.p2.y) && x >= fmin(edge2.p1.y, edge2.p2.y) )
+                if ( y >= fmin(edge1.p1.y, edge1.p2.y) && y >= fmin(edge2.p1.y, edge2.p2.y) )
                 {
                     interPoint.x = x;
                     interPoint.y = y;
