@@ -3,7 +3,7 @@
 #include<iostream>
 #include<fstream>
 
-void save(sf::VertexArray &path, sf::Vector2f screen)
+void save(sf::VertexArray &path, sf::Vector2f screen, sf::VertexArray &rewards, sf::Vector2f spawn)
 {
     std::vector<float> data;
     
@@ -19,12 +19,35 @@ void save(sf::VertexArray &path, sf::Vector2f screen)
 
     std :: ofstream fout(fileName);
     int vertexCount = path.getVertexCount();
+
     fout.write((char*)&vertexCount, sizeof(int));
 
     for(int i = 0; i < data.size(); i++)
     {
         fout.write((char*)&data[i], sizeof(float));
     }
+
+    data.clear();
+
+    for(int i = 0; i < rewards.getVertexCount(); i++)
+    {
+        data.push_back( rewards[i].position.x / screen.x );
+        data.push_back( rewards[i].position.y / screen.y );
+    }
+
+    int rewardCount = rewards.getVertexCount();
+    fout.write((char*)&rewardCount, sizeof(int));
+
+    for(int i = 0; i < data.size(); i++)
+    {
+        fout.write((char*)&data[i], sizeof(float));
+    }
+
+    spawn.x /= screen.x;
+    spawn.y /= screen.y;
+
+    fout.write((char*)&spawn.x, sizeof(float));
+    fout.write((char*)&spawn.y, sizeof(float));
 
     fout.close();
 }
@@ -34,9 +57,10 @@ int main()
     sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Path Editor", sf::Style::Fullscreen);
     sf::Event event;
 
-    sf::VertexArray path;
+    sf::VertexArray path, rewards;
     path.setPrimitiveType(sf::PrimitiveType::Lines);
-    bool sameObj = false; int startOfPath = 0;
+    bool sameObj = false, target = false; int startOfPath = 0;
+    sf::Vector2f spawn;
 
     while(window.isOpen())
     {
@@ -51,16 +75,24 @@ int main()
                 case ( sf::Event::MouseButtonPressed ):
                     if ( sf::Mouse::isButtonPressed(sf::Mouse::Button::Left))
                     {
-                        if ( path.getVertexCount() > 0 && sameObj )
+                        if ( !target )
                         {
-                            path.append( sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))) );
-                            path.append( path[ path.getVertexCount() - 1 ] );
+                            if ( path.getVertexCount() > 0 && sameObj )
+                            {
+                                path.append( sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))) );
+                                path.append( path[ path.getVertexCount() - 1 ] );
+                            }
+                            else
+                            {
+                                path.append( sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))) );
+                                startOfPath = path.getVertexCount() - 1;
+                                sameObj = true;
+                            }
                         }
                         else
                         {
-                            path.append( sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))) );
-                            startOfPath = path.getVertexCount() - 1;
-                            sameObj = true;
+                            rewards.append( sf::Vertex(sf::Vector2f(sf::Mouse::getPosition(window))) );
+                            rewards[ rewards.getVertexCount() - 1 ].color = sf::Color::Red;
                         }
                     }
                     else if ( sf::Mouse::isButtonPressed(sf::Mouse::Button::Right) )
@@ -78,11 +110,25 @@ int main()
                     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::S) )
                     {
                         window.close();
-                        save(path, sf::Vector2f( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height ));
+                        save(path, sf::Vector2f( sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height ), rewards, spawn);
                     }
 
                     if ( sf::Keyboard::isKeyPressed(sf::Keyboard::C) )
+                    {
                         path.clear();
+                        rewards.clear();
+                    }
+
+                    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::P) )
+                    {
+                        spawn = sf::Vector2f(sf::Mouse::getPosition(window));
+                    }
+
+                    if ( sf::Keyboard::isKeyPressed(sf::Keyboard::T) )
+                    {
+                        if ( target ) target = false;
+                        else target = true;
+                    }
 
                     break;
             }
@@ -90,6 +136,8 @@ int main()
             window.clear(sf::Color::Black);
 
             window.draw(path);
+
+            window.draw(rewards);
 
             window.display();
         }

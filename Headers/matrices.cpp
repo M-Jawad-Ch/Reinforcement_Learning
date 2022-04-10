@@ -8,10 +8,10 @@ class Matrix
     void init(float input)                                                  // Initiallizes weights for weight matrices using 'He Initiallization'
     {
         std::random_device rdev;
-        std::normal_distribution<float> dist(0, 1.0 / 0.0);
+        std::uniform_real_distribution<float> dist(0, 1.0 / 0.0);
 
         std::default_random_engine eng( dist(rdev) );                       // Providing the seed to the random number generator using a non-deterministic random number generator
-        dist = std::normal_distribution<float>(0.0, sqrt(2.0 / input));
+        dist = std::uniform_real_distribution<float>  ( -1/sqrt(input), 1/sqrt(input) );
 
         for(int i = 0; i < rows*cols; i++)
         {
@@ -25,7 +25,7 @@ class Matrix
     std::vector<float> arr;
     int static threads;                                                     // Number of threads allowed to processing matrix operations
 
-    Matrix(unsigned int r, unsigned int c, bool nullify = false)
+    Matrix(unsigned int r = 0, unsigned int c = 0, bool nullify = false)
     {
         rows = r;
         cols = c;
@@ -81,6 +81,8 @@ class Matrix
             {
                 workers[i].join();
             }
+
+            return result;
         }
     }
 
@@ -116,6 +118,8 @@ class Matrix
             {
                 workers[i].join();
             }
+
+            return result;
         }
     }
 

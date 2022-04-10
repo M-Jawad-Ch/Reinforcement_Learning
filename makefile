@@ -1,5 +1,5 @@
 build: main.cpp
-	g++ main.cpp -lsfml-graphics -lsfml-window -lsfml-system -o main.exe
+	g++ main.cpp -lsfml-graphics -lsfml-window -lsfml-system -lpthread -o main.exe
 
 buildPE: pathEditor.cpp
 	g++ pathEditor.cpp -lsfml-graphics -lsfml-window -lsfml-system -o pathEditor.exe

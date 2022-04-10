@@ -1,8 +1,6 @@
 #include<math.h>
 #include<SFML/System.hpp>
 
-#include<iostream>
-
 class Edge
 {
     public:

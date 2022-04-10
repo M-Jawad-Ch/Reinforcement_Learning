@@ -1,6 +1,11 @@
-#include"edges.hpp"
+#include"edges.cpp"
+#include"brain.cpp"
 
-class Body
+#include<vector>
+
+#include<SFML/Graphics.hpp>
+
+class Agent
 {
     void setDirection()
     {
@@ -41,14 +46,16 @@ class Body
         }
     }
 
-    public:
-    
     Edge e1, e2, e3, e4;
+
+    public:
     sf::Vector2f center, front;
     sf::Vector2f direction;
     std::vector<Edge> rays;
+    Brain brain;
 
-    Body(sf::Vector2f cent, float scale, int rayCount)
+
+    Agent(int layers, const sf::Vector2f &cent, float scale, int rayCount)
     {
         sf::Vector2f p1, p2, p3, p4;
 
@@ -81,6 +88,26 @@ class Body
         {
             rays[i].p2 = transform(rays[i].p2, center, (22.0/7.0) / 4);
         }
+
+        brain = Brain(layers);
+    }
+
+    bool touch( const std :: vector <Edge> &edges )
+    {
+        sf::Vector2f temp;
+        for(int i = 0; i < edges.size(); i++)
+        {
+            if ( Intersection(e1, edges[i], temp) )
+                return true;
+            else if ( Intersection(e2, edges[i], temp) )
+                return true;
+            else if ( Intersection(e3, edges[i], temp) )
+                return true;
+            else if ( Intersection(e4, edges[i], temp) )
+                return true;
+        }
+
+        return false;
     }
 
     void translate(float stepSize)
